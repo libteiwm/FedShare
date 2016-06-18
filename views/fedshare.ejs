@@ -1,0 +1,174 @@
+<div class="container" >
+  <nav class="navbar navbar-info" ng-controller="TranslateController">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand page-scroll" href="#"><img class="image-responsive" src="images/library_logo.png" alt="ΒΙΒΛΙΟΘΗΚΗ Τ.Ε.Ι Δυτικής Μακεδονίας"></a>
+      </div>
+      <div>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#" data-toggle="modal" data-target="#myModal">{{'help'|translate}}</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{'language'|translate}} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a ng-click="changeLanguage('el')"> {{'languageGreek'|translate}}</a></li>
+              <li><a ng-click="changeLanguage('en')"> {{'languageEnglish'|translate}}</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <br><br>
+  <div id="AnchorScroll" class="container" ng-controller="SearchController">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <form class="well">
+          <br><br>
+          <div class="input-group">
+            <div class="input-group-btn search-panel" data-toggle="tooltip" data-placement="bottom" title="{{'tooltipFilter'|translate}}">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <span id="search_concept">{{'searchFilters'|translate}}</span> <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li ng-click="fields='all'"><a href="#all">{{'allFields'|translate}}</a></li>
+                <!--<li class="divider"></li>-->
+                <li ng-click="fields='author'"><a href="#author">{{'author'|translate}}</a></li>
+                <li ng-click="fields='supervisor'"><a href="#supervisor">{{'supervisor'|translate}}</a></li>
+                <li ng-click="fields='title'"><a href="#title">{{'title'|translate}}</a></li>
+                <li ng-click="fields='subject'"><a href="#subject">{{'subject'|translate}}</a></li>
+              </ul>
+            </div>
+            <input type="hidden" name="search_param" value="all" id="search_param">
+            <input type="text" class="form-control" ng-model="searchText" name="x" placeholder="{{'placeholder'|translate}}">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-default" ng-click="clear()" data-toggle="tooltip" data-placement="bottom" title="{{'tooltipClear'|translate}}"><span class="glyphicon glyphicon-remove-circle"></span></button>
+                    <button class="btn btn-default" ng-click="search()" type="button" data-toggle="tooltip" data-placement="bottom" title="{{'tooltipSearch'|translate}}"><span class="glyphicon glyphicon-search"></span></button>
+                </span>
+          </div><br>
+          <div class="form-group">
+            <div class="btn-group">
+              <span><label class="btn btn-primary" ng-model="checkModel.all" btn-checkbox data-toggle="tooltip" data-placement="bottom" title="{{'tooltipAllsources'|translate}}">{{'allCheck'|translate}}</label></span>
+              <span><label class="btn btn-primary" ng-model="checkModel.anaktisi" btn-checkbox data-toggle="tooltip" data-placement="bottom" title="{{'tooltipAnaktisis'|translate}}">{{'anaktisiCheck'|translate}}</label></span>
+              <span><label class="btn btn-primary" ng-model="checkModel.grevena" btn-checkbox data-toggle="tooltip" data-placement="bottom" title="{{'tooltipGrevena'|translate}}">{{'grevenaCheck'|translate}}</label></span>
+              <span><label class="btn btn-primary" ng-model="checkModel.kastoria" btn-checkbox data-toggle="tooltip" data-placement="bottom" title="{{'tooltipKastoria'|translate}}">{{'kastoriaCheck'|translate}}</label></span>
+              <span><label class="btn btn-primary" ng-model="checkModel.kozani" btn-checkbox data-toggle="tooltip" data-placement="bottom" title="{{'tooltipKozani'|translate}}">{{'kozaniCheck'|translate}}</label></span>
+              <span><label class="btn btn-primary" ng-model="checkModel.florina" btn-checkbox data-toggle="tooltip" data-placement="bottom" title="{{'tooltipFlorina'|translate}}">{{'florinaCheck'|translate}}</label></span>
+            </div>
+          </div>
+          <br>
+          <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" dismiss-on-timeout="4000">{{alert.msg|translate}}</alert>
+        </form>
+        <div ng-show="!isCollapsed">
+          <div class="well well-lg">
+            <article>
+              <article>
+                <h4 ><small>{{'title'|translate}}: </small> {{selectedRecord.title}}</h4>
+                <p ng-show="selectedRecord.author!=null"><small>{{'author'|translate}}: </small> {{selectedRecord.author}}</p>
+                <p ng-show="selectedRecord.supervisor!=null"><small>{{'supervisor'|translate}}: </small> {{selectedRecord.supervisor}}</p>
+                <p ng-show="selectedRecord.subject!=null"><small>{{'subject'|translate}}: </small> {{selectedRecord.subject}}</p>
+                <p ng-show="selectedRecord.description!=null"><small>{{'description'|translate}}: </small> {{selectedRecord.description}}</p>
+                <p ng-show="selectedRecord.date!=null"><small>{{'date'|translate}}: </small> {{selectedRecord.date}}</p>
+                <p ng-show="selectedRecord.isbn!=null"><small>{{'isbn'|translate}}: </small> {{selectedRecord.isbn}}</p>
+                <p ng-show="selectedRecord.deweynumber"><small>{{'deweyNumber'|translate}}: </small> {{selectedRecord.deweynumber}}</p>
+                <p ng-show="selectedRecord.catalog!=null"><small>{{'source'|translate}}: </small> {{selectedRecord.catalog}}</p>
+                <p ng-show="selectedRecord.availability!=null"><small>{{'availability'|translate}}: </small> {{selectedRecord.availability}}</p>
+                <p ng-show="selectedRecord.magazine"><small>{{'magazine'|translate}} </small></p>
+                <p ng-show="selectedRecord.url"><a href="{{selectedRecord.url}}">{{selectedRecord.url}}</a></p>
+                <p ng-show="selectedRecord.source">
+                <div ng-switch="selectedRecord.source">
+                  <p ng-switch-when="195.130.83.165:210/ADVANCE">
+                    <small>{{'infogrevena'|translate}}: </small>
+                    <a href="tel:2462061612" target="_blank"><button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-phone-alt"></span> 2462061612 </button></a>
+                    <a href="danismoswm@gmail.com" target="_blank"><button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-envelope"></span> danismoswm@gmail.com </button></a>
+                  </p>
+                  <p ng-switch-when="195.130.86.200:210/ADVANCE">
+                    <small>{{'infoflorina'|translate}}: </small>
+                    <a href="tel:2385054667" target="_blank"><button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-phone-alt"></span> 2385054667 </button></a>
+                    <a href="mailto:libflo@teiwm.gr" target="_blank"><button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-envelope"></span> libflo@teiwm.gr </button></a>
+                  </p>
+                  <p ng-switch-when="195.130.87.12:210/ADVANCE">
+                    <small>{{'infokastoria'|translate}}: </small>
+                    <a href="tel:2467087183" target="_blank"><button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-phone-alt"></span> 2467087183 </button></a>
+                    <a href="mailto:libkas@teiwm.gr" target="_blank"><button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-envelope"></span> libkas@teiwm.gr </button></a>
+                  </p>
+                  <p ng-switch-when="195.130.83.160:210/ADVANCE">
+                    <small>{{'infokozani'|translate}}: </small>
+                    <a href="tel:2461068203" target="_blank"><button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-phone-alt"></span> 2461068203 </button></a>
+                    <a href="mailto:danismoswm@gmail.com" target="_blank"><button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-envelope"></span> danismoswm@gmail.com </button></a>
+                  </p>
+                </div>
+              </article>
+            </article>
+          </div>
+        </div>
+        <table st-safe-src="searchCollection" st-table="displayedCollection" class="table table-hover">
+          <thead ng-show="displayedCollection.length>0">
+          <tr>
+            <th><small>{{'recordNum'|translate}}</small></th>
+            <th><small>{{'title'|translate}}</small></th>
+            <th><small>{{'author'|translate}}</small></th>
+            <th><small>{{'date'|translate}}</small></th>
+            <th><small>{{'source'|translate}}</small></th>
+          </tr>
+          </thead>
+          <tbody ng-show="isLoading">
+          <tr>
+            <td colspan="4" class="text-center"><img src="images/loader.gif" /></td>
+          </tr>
+          </tbody>
+          <tbody>
+          <tr st-select-row="row" ng-repeat="row in displayedCollection" style="cursor: pointer;">
+            <td><div ng-click="scrollTo()">{{row.number}}</div></td>
+            <td><div ng-click="scrollTo()">{{row.title}}</div></td>
+            <td><div ng-click="scrollTo()">{{row.author}}</div></td>
+            <td><div ng-click="scrollTo()">{{row.date}}</div></td>
+            <td><div ng-click="scrollTo()">{{row.source}}</div></td>
+          </tr>
+          </tbody>
+          <tfoot>
+          <tr>
+            <td colspan="5" class="text-center">
+              <div st-items-by-page="10" st-pagination="" st-template="pagination.control.html"></div>
+              <ul class="pager" ng-show="displayedCollection.length>0">
+                <li><a>{{'totalRecords'|translate}} {{searchCollection.length}}</a></li>
+              </ul>
+            </td>
+          </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">{{'instructionTitle'|translate}}</h4>
+      </div>
+      <div class="modal-body">
+        <p>{{'instructionsone'|translate}}</p>
+        <p>{{'instructionstwo'|translate}}</p>
+        <p>{{'instructionsthree'|translate}}</p>
+        <p>{{'instructionsfour'|translate}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{'close'|translate}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <img class="center-block img-responsive" src="images/eu.jpg" alt="Χρηματοδότηση"/>
+  </div>
+</footer>

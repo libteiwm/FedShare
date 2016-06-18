@@ -1,0 +1,21 @@
+{
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular":"1.4.8",
+    "jquery":null,
+    "bootstrap":null,
+    "angular-bootstrap":"0.14.3",
+    "angular-translate":null,
+    "angular-smart-table":null
+  },
+  "name": "FedShare",
+  "version": "0.0.0",
+  "author": "gkatziourasemmanouil",
+  "private": true
+}
