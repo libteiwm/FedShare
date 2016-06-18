@@ -27,6 +27,7 @@ module.exports = function(agenda) {
     var job = {
         disabled:false,
         name: "AddStopWords",
+        frequency: 'every 1 day',
         run: function(job,done){
 
             sails.log.info("Adding stop words");

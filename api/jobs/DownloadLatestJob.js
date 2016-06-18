@@ -26,8 +26,9 @@
 module.exports = function(agenda) {
     var job = {
         disabled: false,
-        frequency: 'every 1 minute',
+        frequency: 'every 1 day',
         run: function(job, done) {
+
             sails.log.info("Refreshing record");
 
             done();
