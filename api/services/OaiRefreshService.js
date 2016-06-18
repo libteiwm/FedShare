@@ -140,9 +140,9 @@ var fetchAndSaveRecord = function(recordName,callback) {
         },
         function(document,callback) {
 
-            var oaiDocument = EPrintsResultExtractor.normalizeRecord(document);
+            var normalizedDocument = EPrintsResultExtractor.normalizeRecord(document);
 
-            OaiRecords.create(oaiDocument)
+            OaiService.insertRecord(normalizedDocument)
                 .then(function(result) {
                     callback(null,result);
                 })

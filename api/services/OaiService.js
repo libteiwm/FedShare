@@ -27,7 +27,9 @@ var async = require('async'),
     Promise = require('bluebird').Promise,
     OaiRepository = require('../repositories/oai/OaiRepository'),
     uwords = require('uwords'),
-    lodash = require('lodash');
+    lodash = require('lodash'),
+    GreekStemmer = require('../stemmer/GreekStemmer'),
+    natural = require('natural');
 
 
 var insertRecord = function(record) {
@@ -35,6 +37,8 @@ var insertRecord = function(record) {
     return new Promise(function(resolve,reject) {
         if(__validateRecord(record)) {
 
+            
+            
             var oaiId = record.oaiId;
 
             var stemmedTitle = __stemmWords(__extractTitleWords(record))
@@ -116,13 +120,13 @@ var __stemmWords = function (words) {
 
     var stemmedWords = []
 
-    var greekStemmer = new GreekStemmer()
+    var greekStemmer = new GreekStemmer();
 
     for(var i=0;i<words.length;i++) {
 
         var  word = words[i]
 
-        stemmedWords.push(this.__getPlain(word,greekStemmer))
+        stemmedWords.push(__getPlain(word,greekStemmer))
 
         word = greekStemmer.stem(word)
         word = natural.PorterStemmer.stem(word)
@@ -361,42 +365,8 @@ var findNonExistentWords = function(words) {
     });
 }
 
-/*
-var findNonExistentWords = function(stems) {
-
-    return new Promise(function(resolve,reject) {
-        async.map(Object.keys(stems),function(key,callback) {
-
-            if(stem.length<=1) {
-                callback(null,null);
-            } else {
-                StopWords.findOne({term:key}).exec(function(err,result) {
-                    if(err) {
-                        callback(err);
-                    } else if(result) {
-                        callback();
-                    } else {
-                        callback(null,key)
-                    }
-                });
-            }
-        },function(err,results) {
-
-            var wordsToSearch = [];
-
-            for(var i=0;i<results.length;i++) {
-                if(results[i]) {
-                    wordsToSearch.push(results[i]);
-                }
-            }
-
-            resolve(wordsToSearch);
-        });
-    });
-}
-*/
 
 module.exports = {
-
-    fetchRecords: fetchRecords
+    fetchRecords: fetchRecords,
+    insertRecord: insertRecord
 }
