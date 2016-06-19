@@ -23,7 +23,111 @@
  *
  */
 
-var Promise = require('bluebird').Promise;
+var Promise = require('bluebird').Promise,
+    async = require('async');
+
+var insertRecord = function (record) {
+
+    var wordMap = __createWordMap(record);
+    return __processWords(record.oaiId,wordMap);
+}
+
+var __createWordMap = function (record) {
+
+    var wordMap = {}
+
+    for(var i=0;record.stemmedTitle&&i<record.stemmedTitle.length;i++) {
+
+        var word = record.stemmedTitle[i];
+
+        if(wordMap[word]) {
+            wordMap[word].title = true;
+        } else {
+            wordMap[word] = {"title":true};
+        }
+    }
+
+    for(var i=0;record.stemmedSubject&&i<record.stemmedSubject.length;i++) {
+
+        var word = record.stemmedSubject[i];
+
+        if(wordMap[word]) {
+            wordMap[word].subject = true;
+        } else {
+            wordMap[word] = {"subject":true};
+        }
+    }
+
+    for(var i=0;record.stemmedAuthor&&i<record.stemmedAuthor.length;i++) {
+
+        var word = record.stemmedAuthor[i];
+
+        if(wordMap[word]) {
+            wordMap[word].author = true;
+        } else {
+            wordMap[word] = {"author":true};
+        }
+    }
+
+    for(var i=0;record.stemmedDescription&&i<record.stemmedDescription.length;i++) {
+
+        var word = record.stemmedDescription[i];
+
+        if(wordMap[word]) {
+            wordMap[word].description = true;
+        } else {
+            wordMap[word] = {"description":true};
+        }
+    }
+
+    for(var i=0;record.stemmedCorpCreators&&i<record.stemmedCorpCreators.length;i++) {
+
+        var word = record.stemmedCorpCreators[i];
+
+        if(wordMap[word]) {
+            wordMap[word].corpcreator = true;
+        } else {
+            wordMap[word] = {"corpcreator":true};
+        }
+    }
+
+    return wordMap;
+};
+
+var __processWords = function(oaiId,wordMap) {
+
+    return new Promise(function (resolve,reject) {
+
+        var words = Object.keys(wordMap);
+
+        StemDictionary.native(function (err,collection) {
+
+            if(err) {
+                reject(err);
+            } else {
+                
+                async.map(words,
+                    function(word,callback) {
+
+                        var record = {};
+                        record.oaiId = oaiId;
+                        record.occurences = wordMap[word];
+
+                        collection.updateOne({term:word},{$push:{records:record}},{upsert:true},callback);
+                        
+                    },function(err,result) {
+                        
+                        if(err) {
+                            reject(err);
+                        } else {
+                            resolve();
+                        }
+                    }
+                );
+            }
+        });
+    });
+};
 
 var findRecordsThatMatch = function(terms,fields) {
 
@@ -70,8 +174,9 @@ var findRecordsThatMatch = function(terms,fields) {
             }
         });
     });
-}
+};
 
 module.exports = {
-        findRecordsThatMatch : findRecordsThatMatch
+    findRecordsThatMatch : findRecordsThatMatch,
+    insertRecord: insertRecord
 }

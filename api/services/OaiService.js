@@ -26,6 +26,7 @@
 var async = require('async'),
     Promise = require('bluebird').Promise,
     OaiRepository = require('../repositories/oai/OaiRepository'),
+    StemDictionaryRepository = require('../repositories/oai/StemDictionaryRepository'),
     uwords = require('uwords'),
     lodash = require('lodash'),
     GreekStemmer = require('../stemmer/GreekStemmer'),
@@ -72,7 +73,14 @@ var insertRecord = function(record) {
                             if(err) {
                                 reject(err);
                             } else {
-                                resolve(result);
+                                StemDictionaryRepository
+                                    .insertRecord(record)
+                                    .then(function (result) {
+                                        resolve(result);
+                                    })
+                                    .catch(function (err) {
+                                        reject(err);
+                                    });
                             }
                         });
                 })
