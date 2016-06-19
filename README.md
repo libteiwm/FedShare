@@ -1,7 +1,7 @@
-# FedShare
+# [FedShare](http://fedshare.teiwm.gr/)
 
 ### Library of Technological Educational Institute of Western Macedonia
 
-A Federated Search Engine for Z39.50 &amp; OAI-PMH protocols, created with Node.js & AngularJS
+#### A Federated Search Engine for Z39.50 and OAI-PMH protocols, created with **Node.js** and **AngularJS**
 
-http://fedshare.teiwm.gr
+_Author:_ Emmanouil Gkatziouras - _Project Management:_ Fotios Stefanidis
