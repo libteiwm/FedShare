@@ -44,6 +44,16 @@ var createSearcher = function(source,fields,text) {
 
                 OaiService.fetchRecords(text,fields)
                     .then(function(records) {
+
+                        for(var i=0;i<records.length;i++) {
+                            delete records[i].record.stemmedTitle;
+                            delete records[i].record.stemmedSubject;
+                            delete records[i].record.stemmedAuthor;
+                            delete records[i].record.stemmedDescription;
+                            delete records[i].record.stemmedCorpCreators;
+                            delete records[i].record.stemCount;
+                        }
+
                         callback(null,records);
                     }).catch(function(err) {
                         callback(err)
